@@ -5,10 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace DatingAppApi.Controllers
-{
-    [ApiController]
-    [Route("api/[controller]")] // api/Users
-    public class UsersController : ControllerBase
+{    
+    public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
         public UsersController(IUserRepository userRepository)
