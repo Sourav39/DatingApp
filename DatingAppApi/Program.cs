@@ -1,28 +1,12 @@
-using DatingAppApi.Data;
-using DatingAppApi.Repositories;
-using Microsoft.EntityFrameworkCore;
+using DatingAppApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DataContext>(options => 
-{
-   options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
-{
-    builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));
-
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -37,6 +21,7 @@ app.UseCors("corsapp");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 

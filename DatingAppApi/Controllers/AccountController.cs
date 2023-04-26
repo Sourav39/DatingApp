@@ -20,12 +20,12 @@ namespace DatingAppApi.Controllers
     public class AccountController : BaseApiController
     {
         private readonly IAccountRepository _accountRepository;
-        private readonly DataContext _context;
+        private readonly DataContext _context;       
 
         public AccountController(IAccountRepository accountRepository, DataContext context)
         {
             _accountRepository = accountRepository;
-            _context = context;
+            _context = context;           
         }
        
        [HttpPost("register")]

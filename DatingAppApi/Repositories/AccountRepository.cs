@@ -12,12 +12,14 @@ namespace DatingAppApi.Repositories
     public class AccountRepository : IAccountRepository
     {
         private readonly DataContext _context;
-        public AccountRepository(DataContext context)
+         private readonly ITokenService _tokenService;
+        public AccountRepository(DataContext context, ITokenService tokenService)
         {
             _context = context;
+             _tokenService = tokenService;
         }
 
-        public async Task<AppUser> Login(LoginDTO loginDTO)
+        public async Task<UserDTO> Login(LoginDTO loginDTO)
         {
             var user = await _context.Users.SingleOrDefaultAsync(_=>_.UserName == loginDTO.Username);                        
 
@@ -34,10 +36,14 @@ namespace DatingAppApi.Repositories
                     return null;
                 }                
              }
-             return user;
+             return new UserDTO
+             {
+                Username = user.UserName,
+                Token = _tokenService.CreateToken(user)
+             };
         }
 
-        public async Task<AppUser> RegisterUser(string username, string password)
+        public async Task<UserDTO> RegisterUser(string username, string password)
         {
            using var hmac = new HMACSHA512();
            var user = new AppUser
@@ -50,7 +56,11 @@ namespace DatingAppApi.Repositories
           _context.Users.Add(user);
           await _context.SaveChangesAsync();
 
-          return user;
+          return new UserDTO
+          {
+            Username = user.UserName,
+            Token = _tokenService.CreateToken(user)
+          };
         }
       
         public async Task<bool> UserExists(string username)

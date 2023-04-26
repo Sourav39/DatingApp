@@ -9,8 +9,8 @@ namespace DatingAppApi.Repositories
 {
     public interface IAccountRepository
     {
-        Task<AppUser> RegisterUser(string username, string password);
+        Task<UserDTO> RegisterUser(string username, string password);
         Task<bool> UserExists(string username);
-        Task<AppUser> Login(LoginDTO loginDTO);
+        Task<UserDTO> Login(LoginDTO loginDTO);
     }
 }
