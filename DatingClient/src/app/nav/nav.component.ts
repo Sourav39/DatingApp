@@ -11,14 +11,22 @@ export class NavComponent implements OnInit {
  loginForm! : FormGroup;
  model : any = {}
  loggedIn = false;
- constructor(private accService: AccountService) { }  
+ constructor(public accService: AccountService) { }  
  
- ngOnInit(): void {
-     this.loginForm = new FormGroup({
-      'username' : new FormControl('', [Validators.required]),
-      'password' : new FormControl('', [Validators.required])
-     });
- }
+  ngOnInit(): void {
+    //this.getCurrentUser(); // no need when using async pipe directly
+    this.loginForm = new FormGroup({
+      'username': new FormControl('', [ Validators.required ]),
+      'password': new FormControl('', [ Validators.required ])
+    });
+  }
+
+//  getCurrentUser() {
+//   this.accService.currentUser$.subscribe({
+//     next: user => this.loggedIn = !!user,   //!! turns users into boolean. If user has value it will return true.
+//     error: error => console.log(error)
+//   })
+//  }
 
  onLogin(){
   debugger;
@@ -26,14 +34,15 @@ export class NavComponent implements OnInit {
   this.accService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
     next: response => {
       console.log(response);
-      this.loggedIn = true
+     // this.loggedIn = true
     },
     error: error => console.log(error)
   });
  }
 
  logout(){
-  this.loggedIn = false;
+  this.accService.logout();
+ // this.loggedIn = false;
  }
 
 }
