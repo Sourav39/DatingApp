@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AccountService } from '../services/account.service';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nav',
@@ -10,8 +12,9 @@ import { AccountService } from '../services/account.service';
 export class NavComponent implements OnInit {
  loginForm! : FormGroup;
  model : any = {}
- loggedIn = false;
- constructor(public accService: AccountService) { }  
+ //loggedIn = false;
+ constructor(public accService: AccountService, private router: Router,
+  private toastr: ToastrService) { }  
  
   ngOnInit(): void {
     //this.getCurrentUser(); // no need when using async pipe directly
@@ -32,16 +35,14 @@ export class NavComponent implements OnInit {
   debugger;
   console.log("Form Data:" + this.loginForm.value.username , " ",  this.loginForm.value.password)
   this.accService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
-    next: response => {
-      console.log(response);
-     // this.loggedIn = true
-    },
-    error: error => console.log(error)
+    next: _ => this.router.navigateByUrl('/members'),
+    error: error => this.toastr.error(error.error)
   });
  }
 
  logout(){
   this.accService.logout();
+  this.router.navigateByUrl('/');
  // this.loggedIn = false;
  }
 
