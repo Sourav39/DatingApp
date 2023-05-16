@@ -29,6 +29,7 @@ namespace DatingAppApi.Extensions
             }));
 
             Services.AddScoped<ITokenService, TokenService>();
+            Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             return Services;
         }
