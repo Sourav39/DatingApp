@@ -16,6 +16,7 @@ export class LoadingInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
+    //can use spinnerService.show and hide() directly here.
     this.busyService.busy();
 
     return next.handle(request).pipe(
